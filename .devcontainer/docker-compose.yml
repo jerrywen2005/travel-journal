@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: travel_journal_db_db
+      POSTGRES_DB: travel_journal_db
     ports:
       - "5433:5432"
     volumes:
