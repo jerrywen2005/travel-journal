@@ -10,3 +10,4 @@ def get_env(key: str) -> str:
 load_dotenv()
 
 DATABASE_URL = get_env("DATABASE_URL")
+JWT_SECRET = get_env("JWT_SECRET")
