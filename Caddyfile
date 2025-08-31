@@ -1,4 +1,4 @@
-http://localhost:1660
+http://localhost:1560
 
 reverse_proxy /api* http://localhost:1661
 reverse_proxy /ws* http://localhost:1661

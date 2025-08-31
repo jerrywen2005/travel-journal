@@ -11,7 +11,7 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r /workspace/requir
 # Install system packages: Node.js, npm, git, curl, postgresql
 RUN apt-get update && \
     apt-get install -y curl git postgresql-client && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
 
 # Install Caddy web server for reverse proxy
