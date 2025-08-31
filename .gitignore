@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+node_modules/
+dist/
+build/
+env/
+.venv/
+
+# VS Code
+.vscode/
+
+# Environment & Secrets
+.env
+.env.*
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# MacOS
+.DS_Store

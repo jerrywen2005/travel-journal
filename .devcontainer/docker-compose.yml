@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    container_name: travel_journal
+    env_file:
+      - ../backend/.env
+    ports:
+      - "1660:1560"
+      - "1661:1561"
+      - "1662:1562"
+    depends_on:
+      - db
+    volumes:
+      - ..:/workspaces/travel-journal
+
+  db:
+    image: postgres:15
+    container_name: travel_journal_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: travel_journal_db_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
