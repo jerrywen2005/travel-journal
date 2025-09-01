@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from backend.app.models.user import User
@@ -45,8 +45,5 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db:
     db_user = db.query(User).filter(User.email == form_data.username).first()
     if not db_user or not verify_password(form_data.password, db_user.hashed_password): # type: ignore
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    if not db_user.is_verified: # type: ignore
-        raise HTTPException(status_code=403, detail="Please verify your email first.")
-
     token = create_access_token({"sub": str(db_user.id)})
     return {"access_token": token, "token_type": "bearer"}
