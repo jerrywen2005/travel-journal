@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from backend.app.db.session import get_db
+from backend.app.models.user import User
 from backend.app.services import travel_record
 from backend.app.schemas.travel_record import RecordFilters, RecordsPage, TravelRecordCreate, TravelRecordRead, TravelRecordUpdate
 from backend.app.services.auth import get_current_user
@@ -9,26 +10,26 @@ from backend.app.services.auth import get_current_user
 router = APIRouter(tags=["Records"])
 
 @router.post("/", response_model=TravelRecordRead)
-def create_record(payload: TravelRecordCreate, db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
-    return travel_record.create_record(db, user_id, payload)
+def create_record(payload: TravelRecordCreate, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    return travel_record.create_record(db, user.id, payload)
 
 @router.get("/{record_id}", response_model=TravelRecordRead)
-def read_record(record_id: int, db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
-    rec = travel_record.get_record(db, user_id, record_id)
+def read_record(record_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    rec = travel_record.get_record(db, user.id, record_id)
     if not rec:
         raise HTTPException(status_code=404, detail="Record not found")
     return rec
 
 @router.patch("/{record_id}", response_model=TravelRecordRead)
-def update_record(record_id: int, payload: TravelRecordUpdate, db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
-    rec = travel_record.update_record(db, user_id, record_id, payload)
+def update_record(record_id: int, payload: TravelRecordUpdate, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    rec = travel_record.update_record(db, user.id, record_id, payload)
     if not rec:
         raise HTTPException(status_code=404, detail="Record not found")
     return rec
 
 @router.delete("/{record_id}", status_code=204)
-def delete_record(record_id: int, db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
-    ok = travel_record.delete_record(db, user_id, record_id)
+def delete_record(record_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    ok = travel_record.delete_record(db, user.id, record_id)
     if not ok:
         raise HTTPException(status_code=404, detail="Record not found")
     return
@@ -36,7 +37,7 @@ def delete_record(record_id: int, db: Session = Depends(get_db), user_id: int = 
 @router.get("/", response_model=RecordsPage)
 def list_records(
     db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user),
+    user: User = Depends(get_current_user),
     q: str | None = Query(default=None),
     country_code: str | None = None,
     region: str | None = None,
@@ -56,5 +57,5 @@ def list_records(
         date_from=date_from, date_to=date_to, # type: ignore
         order_by=order_by, limit=limit, offset=offset
     )
-    items, total = travel_record.search_records(db, user_id, filters)
+    items, total = travel_record.search_records(db, user.id, filters)
     return {"items": items, "total": total, "limit": limit, "offset": offset}

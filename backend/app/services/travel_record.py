@@ -45,14 +45,11 @@ def search_records(db: Session, user_id: int, filters: RecordFilters) -> tuple[l
             func.lower(TravelRecord.title).like(like),
             func.lower(TravelRecord.notes).like(like),
             func.lower(TravelRecord.city).like(like),
-            func.lower(TravelRecord.region).like(like),
         ))
 
     # Exact search
     if filters.country_code:
         q = statement.filter(TravelRecord.country_code == filters.country_code)
-    if filters.region:
-        q = statement.filter(TravelRecord.region == filters.region)
     if filters.city:
         q = statement.filter(TravelRecord.city == filters.city)
     if filters.dest_type:
