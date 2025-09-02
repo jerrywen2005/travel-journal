@@ -32,7 +32,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 # Import all models to register with Base.metadata
-from backend.app.models import user
+from backend.app.models import user, travel_record
 
 # add your model's MetaData object here
 # for 'autogenerate' support
