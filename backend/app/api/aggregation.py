@@ -1,47 +1,17 @@
-from typing import Any
-
-from sqlalchemy import func
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from backend.app.models.travel_record import TravelRecord
+from backend.app.services.auth import get_current_user
+from backend.app.db.session import get_db
+from backend.app.schemas.aggregation import AvgRating, TopDestinationPerMonth
+from backend.app.services.aggregation import avg_rating_by_country, top_destination_per_month
 
-def avg_rating_by_country(db: Session, user_id: int) -> list[dict[str, Any]]:
-    rows = (
-        db.query(TravelRecord.country_code,
-                 func.avg(TravelRecord.rating),
-                 func.count(TravelRecord.id))
-        .filter(TravelRecord.user_id == user_id)
-        .group_by(TravelRecord.country_code)
-        .all()
-    )
-    return [
-        {"country_code": c, "avg_rating": float(avg), "count": int(cnt)}
-        for c, avg, cnt in rows
-    ]
+router = APIRouter(tags=["aggregations"])
 
-def top_rated_per_city(db: Session, user_id: int) -> list[dict[str, Any]]:
-    # gives max rating for each city
-    subq = (
-        db.query(TravelRecord.city,
-                 func.max(TravelRecord.rating).label("max_rating"))
-        .filter(TravelRecord.user_id == user_id)
-        .group_by(TravelRecord.city)
-        .subquery()
-    )
-    rows = (
-        db.query(TravelRecord)
-        .join(subq, (TravelRecord.city == subq.c.city) &
-                    (TravelRecord.rating == subq.c.max_rating))
-        .filter(TravelRecord.user_id == user_id)
-        .all()
-    )
-    return [
-        {
-            "city": r.city,
-            "title": r.title,
-            "rating": r.rating,
-            "country_code": r.country_code,
-            "id": r.id,
-        }
-        for r in rows
-    ]
+@router.get("/avg-rating-by-country", response_model=list[AvgRating])
+def get_avg_by_country(db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
+    return avg_rating_by_country(db, user_id)
+
+@router.get("/top-destination-per-month", response_model=list[TopDestinationPerMonth])
+def get_top_per_month(db: Session = Depends(get_db), user_id: int = Depends(get_current_user)):
+    return top_destination_per_month(db, user_id)
