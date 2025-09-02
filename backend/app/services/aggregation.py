@@ -1,11 +1,10 @@
-from typing import List
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
 from backend.app.models.travel_record import TravelRecord
 from backend.app.schemas.aggregation import AvgRating, TopDestinationPerMonth
 
 
-def avg_rating_by_country(db: Session, user_id: int) -> List[AvgRating]:
+def avg_rating_by_country(db: Session, user_id: int) -> list[AvgRating]:
     statement = (
         select(
             TravelRecord.country_code,
@@ -19,7 +18,7 @@ def avg_rating_by_country(db: Session, user_id: int) -> List[AvgRating]:
     return [AvgRating(key=c, avg_rating=float(avg), count=int(cnt)) for c, avg, cnt in rows]
 
 
-def top_destination_per_month(db: Session, user_id: int) -> List[TopDestinationPerMonth]:
+def top_destination_per_month(db: Session, user_id: int) -> list[TopDestinationPerMonth]:
     month = func.date_trunc("month", TravelRecord.visited_at).label("month")
     rn = func.row_number().over(
         partition_by=month,
