@@ -14,7 +14,6 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     hashed_pw = hash_password(user.password)
-    new_user = User(name=user.name, email=user.email, hashed_password=hashed_pw)
 
     new_user = User(
         name=user.name,
