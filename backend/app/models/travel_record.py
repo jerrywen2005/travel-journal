@@ -41,4 +41,8 @@ class TravelRecord(Base):
         CheckConstraint("rating BETWEEN 1 AND 5", name="ck_travel_records_rating_1_5"),
     )
 
+    photo_path: Mapped[str | None] = mapped_column(String(512))
+    photo_content_type: Mapped[str | None] = mapped_column(String(64))
+    photo_size_bytes: Mapped[int | None] = mapped_column(Integer)
+
     user: Mapped["User"] = relationship(back_populates="records")
