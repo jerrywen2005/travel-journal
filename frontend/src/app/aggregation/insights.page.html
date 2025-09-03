@@ -1,0 +1,52 @@
+<section class="panel">
+  <h2>Average Rating by Country</h2>
+  <table>
+    <thead><tr><th>Country</th><th>Avg Rating</th><th>Count</th></tr></thead>
+    <tbody>
+      @for (r of avg(); track r.key) {
+        <tr><td>{{ r.key }}</td><td>{{ r.avg_rating | number:'1.1-2' }}</td><td>{{ r.count }}</td></tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Top Destination Each Month</h2>
+  <table>
+    <thead><tr><th>Month</th><th>Title</th><th>City</th><th>Country</th><th>Rating</th></tr></thead>
+    <tbody>
+      @for (m of top(); track m.record_id) {
+        <tr>
+          <td>{{ m.month | date:'yyyy MMM' }}</td>
+          <td>{{ m.title }}</td>
+          <td>{{ m.city || '—' }}</td>
+          <td>{{ m.country_code }}</td>
+          <td>{{ m.rating }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Records (Server-sorted)</h2>
+  <div class="sort">
+    <button (click)="setSort('visited_at')">Date {{ sortKey()==='visited_at' ? '('+sortDir()+')':'' }}</button>
+    <button (click)="setSort('rating')">Rating {{ sortKey()==='rating' ? '('+sortDir()+')':'' }}</button>
+    <button (click)="setSort('title')">Title {{ sortKey()==='title' ? '('+sortDir()+')':'' }}</button>
+  </div>
+  <table>
+    <thead><tr><th>Title</th><th>City</th><th>Country</th><th>Rating</th><th>Visited</th></tr></thead>
+    <tbody>
+      @for (r of records(); track r.id) {
+        <tr>
+          <td>{{ r.title }}</td>
+          <td>{{ r.city || '—' }}</td>
+          <td>{{ r.country_code }}</td>
+          <td>{{ r.rating }}</td>
+          <td>{{ r.visited_at | date:'medium' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</section>

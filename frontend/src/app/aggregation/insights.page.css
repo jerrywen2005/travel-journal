@@ -1,0 +1,7 @@
+.panel { margin:16px; padding:16px; border:1px solid #eee; border-radius:12px; }
+h2 { margin-top:0; }
+table { width:100%; border-collapse:collapse; }
+th, td { padding:8px; border-bottom:1px solid #f0f0f0; }
+.sort { display:flex; gap:8px; margin-bottom:8px; }
+button { padding:6px 10px; border:1px solid #ddd; border-radius:8px; background:#fff; cursor:pointer; }
+button:hover { background:#f7f7f7; }

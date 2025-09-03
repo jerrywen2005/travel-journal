@@ -1,34 +1,61 @@
 {
-  "hash": "2a8f1b00",
-  "configHash": "96b00ab5",
+  "hash": "75305874",
+  "configHash": "ce01a4a6",
   "lockfileHash": "22f25de1",
-  "browserHash": "79c34941",
+  "browserHash": "a8ed40bc",
   "optimized": {
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "357046d2",
+      "fileHash": "f343bd0e",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "b136996b",
+      "fileHash": "8ffa479d",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "342452ca",
+      "fileHash": "20bb3cf8",
+      "needsInterop": false
+    },
+    "@angular/common/http": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
+      "file": "@angular_common_http.js",
+      "fileHash": "d200e3b0",
+      "needsInterop": false
+    },
+    "@angular/forms": {
+      "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
+      "file": "@angular_forms.js",
+      "fileHash": "a0ea0865",
+      "needsInterop": false
+    },
+    "@angular/common": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
+      "file": "@angular_common.js",
+      "fileHash": "724707e5",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-HSPCR3X3": {
-      "file": "chunk-HSPCR3X3.js"
+    "chunk-C6SDOPWC": {
+      "file": "chunk-C6SDOPWC.js"
     },
-    "chunk-3FT7VUKY": {
-      "file": "chunk-3FT7VUKY.js"
+    "chunk-ZL6WH26R": {
+      "file": "chunk-ZL6WH26R.js"
+    },
+    "chunk-HMW2UYRC": {
+      "file": "chunk-HMW2UYRC.js"
+    },
+    "chunk-YW65FSQM": {
+      "file": "chunk-YW65FSQM.js"
+    },
+    "chunk-2AFYHOAX": {
+      "file": "chunk-2AFYHOAX.js"
     }
   }
 }

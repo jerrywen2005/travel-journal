@@ -1,0 +1,20 @@
+<div class="auth-card">
+  <h1>Travel Journal — Login</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>Email</label>
+    <input type="email" formControlName="email" placeholder="you@example.com" />
+    @if (form.controls.email.invalid && form.controls.email.touched) {
+      <small>Enter a valid email</small>
+    }
+
+    <label>Password</label>
+    <input type="password" formControlName="password" placeholder="••••••••" />
+    @if (form.controls.password.invalid && form.controls.password.touched) {
+      <small>Password is required (min 6)</small>
+    }
+
+    <button [disabled]="loading()">Login</button>
+    @if (err()) { <p class="error">{{ err() }}</p> }
+  </form>
+</div>
