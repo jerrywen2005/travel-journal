@@ -22,7 +22,8 @@ def update_record(db: Session, user_id: int, record_id: int, data: TravelRecordU
     rec = get_record(db, user_id, record_id)
     if not rec:
         return None
-    for k, v in data.model_dump(exclude_unset=True).items(): # Only includes the fields that user sends for update purposes
+    updates = data.model_dump(exclude_unset=True, exclude_none=True) # Only includes the fields that user sends for update purposes
+    for k, v in updates.items():
         setattr(rec, k, v)
     db.commit()
     db.refresh(rec)
