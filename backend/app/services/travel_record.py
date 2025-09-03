@@ -41,35 +41,31 @@ def search_records(db: Session, user_id: int, filters: RecordFilters) -> tuple[l
 
     if filters.q:
         like = f"%{filters.q.lower()}%"
-        q = statement.filter(or_(
+        statement = statement.where(or_(
             func.lower(TravelRecord.title).like(like),
             func.lower(TravelRecord.notes).like(like),
             func.lower(TravelRecord.city).like(like),
         ))
 
-    # Exact search
     if filters.country_code:
-        q = statement.filter(TravelRecord.country_code == filters.country_code)
+        statement = statement.where(TravelRecord.country_code == filters.country_code)
     if filters.city:
-        q = statement.filter(TravelRecord.city == filters.city)
+        statement = statement.where(TravelRecord.city == filters.city)
     if filters.dest_type:
-        q = statement.filter(TravelRecord.destination_type == filters.dest_type)
-    
-    # Numeric and date range filter
+        statement = statement.where(TravelRecord.destination_type == filters.dest_type)
     if filters.rating_min is not None:
-        q = statement.filter(TravelRecord.rating >= filters.rating_min)
+        statement = statement.where(TravelRecord.rating >= filters.rating_min)
     if filters.rating_max is not None:
-        q = statement.filter(TravelRecord.rating <= filters.rating_max)
+        statement = statement.where(TravelRecord.rating <= filters.rating_max)
     if filters.date_from:
-        q = statement.filter(TravelRecord.visited_at >= filters.date_from)
+        statement = statement.where(TravelRecord.visited_at >= filters.date_from)
     if filters.date_to:
-        q = statement.filter(TravelRecord.visited_at <= filters.date_to)
+        statement = statement.where(TravelRecord.visited_at <= filters.date_to)
 
-    # ordering
     field, _, direction = (filters.order_by or "visited_at:desc").partition(":")
     col = getattr(TravelRecord, field, TravelRecord.visited_at)
     statement = statement.order_by(col.asc() if direction.lower() == "asc" else col.desc())
-    
+
     count_query = select(func.count()).select_from(statement.order_by(None).subquery())
     row_count = db.execute(count_query).scalar_one()
 
