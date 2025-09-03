@@ -1,6 +1,30 @@
 <div class="grid">
   <section class="left">
     <h2>@if (editingId()) { Edit Entry } @else { New Entry }</h2>
+
+    <!-- Google Places search UI -->
+    <label>Search location</label>
+    <input
+      type="text"
+      [value]="query()"
+      (input)="onSearchChange($any($event.target).value)"
+      placeholder="Try: Tokyo Tower, NC Museum of Art..."
+    />
+    @if (showSug() && suggestions().length) {
+      <ul class="sug">
+        @for (s of suggestions(); track s.place_id) {
+          <li (click)="pickSuggestion(s)">{{ s.description }}</li>
+        }
+      </ul>
+    }
+
+    <!-- Map preview -->
+    <app-map
+        [lat]="mapLat()"
+        [lon]="mapLon()"
+        (latLonChange)="onMapLatLonChange($event)"
+    ></app-map>
+
     <form [formGroup]="form" (ngSubmit)="save()">
       <label>Title</label>
       <input formControlName="title" placeholder="Title" />
@@ -14,10 +38,6 @@
           <input formControlName="country_code" />
         </div>
         <div>
-          <label>Region</label>
-          <input formControlName="region" />
-        </div>
-        <div>
           <label>City</label>
           <input formControlName="city" />
         </div>
@@ -26,11 +46,11 @@
       <div class="row">
         <div>
           <label>Latitude</label>
-          <input type="number" step="0.0001" formControlName="latitude" />
+          <input type="number" step="0.0001" formControlName="latitude" (change)="mapLat.set(+$any($event.target).value)" />
         </div>
         <div>
           <label>Longitude</label>
-          <input type="number" step="0.0001" formControlName="longitude" />
+          <input type="number" step="0.0001" formControlName="longitude" (change)="mapLon.set(+$any($event.target).value)" />
         </div>
       </div>
 
@@ -38,16 +58,16 @@
         <div>
           <label>Type</label>
           <select formControlName="destination_type">
-            <option value="city">City</option>
-            <option value="beach">Beach</option>
-            <option value="nature">Nature</option>
-            <option value="historical">Historical</option>
-            <option value="museum">Museum</option>
-            <option value="park">Park</option>
-            <option value="mountain">Mountain</option>
-            <option value="desert">Desert</option>
-            <option value="food">Food</option>
-            <option value="other">Other</option>
+            <option value="CITY">City</option>
+            <option value="BEACH">Beach</option>
+            <option value="NATURE">Nature</option>
+            <option value="HISTORICAL">Historical</option>
+            <option value="MUSEUM">Museum</option>
+            <option value="PARK">Park</option>
+            <option value="MOUNTAIN">Mountain</option>
+            <option value="DESERT">Desert</option>
+            <option value="FOOD">Food</option>
+            <option value="OTHER">Other</option>
           </select>
         </div>
         <div>
@@ -60,6 +80,8 @@
       <input type="datetime-local"
              [value]="form.value.visited_at?.slice(0,16)"
              (change)="form.patchValue({ visited_at: $any($event.target).value + ':00Z' })" />
+
+      <input type="hidden" formControlName="place_external_id" />
 
       <button type="submit">Save</button>
       @if (editingId()) { <button type="button" (click)="editingId.set(null)">Cancel</button> }
